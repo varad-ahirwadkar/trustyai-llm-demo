@@ -7,8 +7,8 @@ agent so our customers can learn more about our products. We'll want to make sur
 the agent are family friendly, and that it does not promote our rival fruit juice vendors. 
 
 ---
-## 1. Install RHOAI and all prerequisite operators for a GPU model deployment
-You'll need to [set up your cluster for a GPU deployment](https://github.com/trustyai-explainability/reference/tree/main/llm-deployment/vllm#install-the-gpu-operators)
+## 1. Install RHOAI and all prerequisite operators
+Install RHOAI operator
 
 ### KServe Raw
 This demo requires the LLM to be deployed as a [KServe Raw deployment](https://access.redhat.com/solutions/7078183)
@@ -24,15 +24,18 @@ This DSC is configured to use a tailored set of images for this demo:
 ---
 ## 3. Deploy Models
 ```bash
-oc new-project model-namespace
-oc apply -f vllm/model_container.yaml
+oc new-project lemonade-demo
 ```
-The model container can take a while to spin up- it's downloading a [Phi-3-mini](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct)
-from Huggingface and saving it into an emulated AWS data connection.
+Create the [s3-secret](guardrails/s3-secret.yml) with creds.
+```
+oc create -f guardrails/s3-secret.yml
+```
 
-```bash
+Deploy the model
+```
 oc apply -f vllm/phi3.yaml
 ```
+
 Wait for the model pod to spin up, should look something like `phi3-predictor-XXXXXX`
 
 You can test the model by sending some inferences to it:
@@ -79,7 +82,7 @@ Open `guardrails/configmap_orchestrator.yaml`. This is our configuration for the
   config.yaml: |
     chat_generation:
       service:
-        hostname: phi3-predictor.model-namespace.svc.cluster.local
+        hostname: phi3-predictor.lemonade-demo.svc.cluster.local
         port: 8080
     detectors:
       regex_competitor:
@@ -92,7 +95,7 @@ Open `guardrails/configmap_orchestrator.yaml`. This is our configuration for the
       hap:
         type: text_contents
         service:
-          hostname: guardrails-detector-ibm-hap-predictor.model-namespace.svc.cluster.local
+          hostname: guardrails-detector-ibm-hap-predictor.lemonade-demo.svc.cluster.local
           port: 8000
         chunker_id: whole_doc_chunker
         default_threshold: 0.5
@@ -100,7 +103,7 @@ Open `guardrails/configmap_orchestrator.yaml`. This is our configuration for the
 
 Here, we've defined the location of our `chat_generation` model server, and the locations of 
 our detector servers. The `hap` detector is reachable via the service that is created by the KServe
-deployment (`phi3-predictor.model-namespace.svc.cluster.local`), while our regex detector sidecar will be launched at `localhost:8080`- this will always
+deployment (`phi3-predictor.lemonade-demo.svc.cluster.local`), while our regex detector sidecar will be launched at `localhost:8080`- this will always
 be the case when using the regex detector sidecar. 
 
 
@@ -113,6 +116,12 @@ On line 19, we've used the following regex pattern to filter out converstations 
 ```
 This will flag anything that matches that regex pattern as a detection- in this case, any mention of the words `apple`, `cranberry`, `grape`, `orange`, or `pineapple` regardless of case.
 
+Note:  Increase the HTTP route's default timeout by adding following annotation to the gateway route : 
+```
+metadata:
+  annotations:
+    haproxy.router.openshift.io/timeout: 10m
+```
 
 ### 4.4) Configure the Guardrails Gateway
 Again, looking inside  `guardrails/configmap_vllm_gateway.yaml`:

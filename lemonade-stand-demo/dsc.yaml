@@ -12,33 +12,42 @@ spec:
   components:
     codeflare:
       managementState: Removed
-    dashboard:
-      managementState: Managed
-    datasciencepipelines:
-      managementState: Removed
     kserve:
       defaultDeploymentMode: RawDeployment
       managementState: Managed
+      nim:
+        managementState: Removed
+      rawDeploymentServiceConfig: Headless
       serving:
+        ingressGateway:
+          certificate:
+            type: OpenshiftDefaultIngress
         managementState: Removed
         name: knative-serving
-    kueue:
-      managementState: Removed
-    modelmeshserving:
-      managementState: Removed
     modelregistry:
       managementState: Removed
       registriesNamespace: rhoai-model-registries
-    ray:
-      managementState: Removed
-    trainingoperator:
-      managementState: Removed
+    feastoperator: {}
     trustyai:
-      managementState: Managed
       devFlags:
         manifests:
           - contextDir: config
-            sourcePath: ''
-            uri: https://github.com/robgeada/trustyai-service-operator/tarball/LemonadeStandDemo
+            sourcePath: overlays/rhoai
+            uri: 'https://github.com/varad-ahirwadkar/trustyai-service-operator/tarball/rhoai-ppc'
+      managementState: Managed
+    ray:
+      managementState: Removed
+    kueue:
+      managementState: Removed
     workbenches:
+      managementState: Removed
+      workbenchNamespace: rhods-notebooks
+    dashboard:
+      managementState: Managed
+    modelmeshserving:
+      managementState: Removed
+    llamastackoperator: {}
+    datasciencepipelines:
+      managementState: Removed
+    trainingoperator:
       managementState: Removed

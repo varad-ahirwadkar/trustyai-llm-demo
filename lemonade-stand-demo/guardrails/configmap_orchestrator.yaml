@@ -6,7 +6,7 @@ data:
   config.yaml: |
     chat_generation:
       service:
-        hostname: phi3-predictor.model-namespace.svc.cluster.local
+        hostname: phi3-predictor.lemonade-demo.svc.cluster.local
         port: 8080
     detectors:
       regex_competitor:
@@ -19,7 +19,7 @@ data:
       hap:
         type: text_contents
         service:
-          hostname: guardrails-detector-ibm-hap-predictor.model-namespace.svc.cluster.local
+          hostname: guardrails-detector-ibm-hap-predictor.lemonade-demo.svc.cluster.local
           port: 8000
         chunker_id: whole_doc_chunker
         default_threshold: 0.5
