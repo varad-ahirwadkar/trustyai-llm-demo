@@ -33,7 +33,7 @@ spec:
         manifests:
           - contextDir: config
             sourcePath: overlays/rhoai
-            uri: 'https://github.com/varad-ahirwadkar/trustyai-service-operator/tarball/rhoai-ppc'
+            uri: 'https://github.com/varad-ahirwadkar/trustyai-service-operator/tarball/multi-rhoai-2.25'
       managementState: Managed
     ray:
       managementState: Removed

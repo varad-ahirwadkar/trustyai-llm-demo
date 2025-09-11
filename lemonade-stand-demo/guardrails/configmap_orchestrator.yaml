@@ -6,7 +6,7 @@ data:
   config.yaml: |
     chat_generation:
       service:
-        hostname: phi3-predictor.lemonade-demo.svc.cluster.local
+        hostname: granite-predictor.lemonade-demo.svc.cluster.local
         port: 8080
     detectors:
       regex_competitor:

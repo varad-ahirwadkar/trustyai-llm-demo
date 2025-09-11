@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: guardrails-orchestrator-config
 data:
-  regexDetectorImage: 'na.artifactory.swg-devops.com/sys-linux-power-team-ftp3distro-docker-images-docker-local/regex-detector:latest'
-  vllmGatewayImage: 'na.artifactory.swg-devops.com/sys-linux-power-team-ftp3distro-docker-images-docker-local/vllm-orchestrator-gateway:latest'
+  regexDetectorImage: 'quay.io/rhoai/odh-built-in-detector-rhel9:rhoai-2.25'
+  vllmGatewayImage: 'quay.io/rhoai/odh-trustyai-vllm-orchestrator-gateway-rhel9:rhoai-2.25'
