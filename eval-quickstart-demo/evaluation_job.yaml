@@ -6,11 +6,12 @@ spec:
   model: local-completions  # this should be either local-completions or local-chat-completions. If your evaluation is multiple-choice, make sure to use the former.
   taskList:
     taskNames:
-      - arc_easy # a list of evaluation tasks to run
+      - arc_challenge # a list of evaluation tasks to run
   logSamples: true
   batchSize: '1'
   allowOnline: true
   allowCodeExecution: false
+  limit: "10"
   outputs:
     pvcManaged:
       size: 5Gi
@@ -18,7 +19,7 @@ spec:
     - name: model
       value: phi3 # this should be the name of the InferenceService you're looking to evaluate
     - name: base_url
-      value: http://phi3-predictor:8080/v1/completions # the location of your model's /chat/completions or /completions endpoint
+      value: http://phi3-predictor.lemonade-demo.svc.cluster.local:8080/v1/completions # the location of your model's /chat/completions or /completions endpoint
     - name: num_concurrent
       value:  "1"
     - name: max_retries

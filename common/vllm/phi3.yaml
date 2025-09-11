@@ -9,10 +9,10 @@ metadata:
     opendatahub.io/serving-runtime-scope: global
     opendatahub.io/template-display-name: vLLM CPU (ppc64le/s390x) ServingRuntime for KServe
     opendatahub.io/template-name: vllm-cpu-runtime
-    openshift.io/display-name: granite
+    openshift.io/display-name: phi3
   labels:
     opendatahub.io/dashboard: "true"
-  name: granite
+  name: phi3
 spec:
   annotations:
     prometheus.io/path: /metrics
@@ -23,6 +23,7 @@ spec:
     - --model=/mnt/models
     - --served-model-name={{.Name}}
     - --max-model-len=2048
+    - --disable-sliding-window 
     command:
     - python
     - -m
@@ -54,11 +55,11 @@ apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
   annotations:
-    openshift.io/display-name: granite
+    openshift.io/display-name: phi3
     serving.kserve.io/deploymentMode: RawDeployment
   labels:
     opendatahub.io/dashboard: "true"
-  name: granite
+  name: phi3
 spec:
   predictor:
     automountServiceAccountToken: false
@@ -75,8 +76,7 @@ spec:
         requests:
           cpu: "6"
           memory: 16Gi
-      runtime: granite
-      storageUri: s3://odh-bucket/ibm-granite/granite-3.3-2b-instruct
-      # storage:
-      #   key: s3-creds
-      #   path: models/granite-3.1-2b-instruct
+      runtime: phi3
+      storage:
+        key: s3-creds
+        path: models/phi-3-mini-4k-instruct
